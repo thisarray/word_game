@@ -46,8 +46,8 @@ h2 {
 
 <p>A 4 letter word guessing game.</p>
 
-<form id="guessForm" name="guessForm" action="" method="get">
-<p><label for="guess">Your Guess:
+<form id="guessForm" name="guessForm">
+<p><label>Your Guess:
 <input type="text" id="guess" name="guess" autofocus required maxlength="4" minlength="4" pattern="[A-Za-z]{4,4}" placeholder="word" spellcheck="false">
 </label>
 <button type="submit">Guess</button></p>
@@ -72,7 +72,7 @@ function getRandomInteger(min, max) {
 }
 
 /*
- * Array of String words.
+ * Array of string words.
  */
 const WORDS = [
   'abby',
@@ -3247,15 +3247,15 @@ const WORDS = [
 const MYSTERY_WORD = WORDS[getRandomInteger(0, WORDS.length)];
 
 /*
- * Number length of the word.
+ * Integer length of the word.
  */
 const LENGTH = MYSTERY_WORD.length;
 
-const form = document.querySelector('#guessForm');
-const output = document.querySelector('output');
-const winMessage = document.querySelector('#win');
-form.addEventListener('submit', (event) => {
-  let guess = form.guess.value.trim().toLowerCase(),
+const FORM = document.querySelector('#guessForm');
+const OUTPUT = document.querySelector('output');
+const WIN_MESSAGE = document.querySelector('#win');
+FORM.addEventListener('submit', (event) => {
+  let guess = FORM.guess.value.trim().toLowerCase(),
       i = 0,
       correctCount = 0;
   if (guess.length === LENGTH) {
@@ -3296,13 +3296,13 @@ form.addEventListener('submit', (event) => {
       else {
         section.classList.add('wrong');
       }
-      output.appendChild(section);
+      OUTPUT.appendChild(section);
 
       i++;
     }
 
     if (correctCount === LENGTH) {
-      winMessage.classList.remove('hidden');
+      WIN_MESSAGE.classList.remove('hidden');
     }
   }
 
