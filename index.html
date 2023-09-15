@@ -3256,52 +3256,44 @@ const OUTPUT = document.querySelector('output');
 const WIN_MESSAGE = document.querySelector('#win');
 FORM.addEventListener('submit', (event) => {
   let guess = FORM.guess.value.trim().toLowerCase(),
-      i = 0,
+      matched = [],
+      leftover = [],
       correctCount = 0;
   if (guess.length === LENGTH) {
-    for (let letter of guess) {
+    for (let i = 0; i < LENGTH; i++) {
+      if (guess[i] === MYSTERY_WORD[i]) {
+        matched.push(true);
+      }
+      else {
+        matched.push(false);
+        leftover.push(MYSTERY_WORD[i]);
+      }
+    }
+    for (let i = 0; i < LENGTH; i++) {
       let section = document.createElement('section'),
           header = document.createElement('h2'),
-          wordCount, guessCount;
+          letter = guess[i],
+          index = leftover.indexOf(letter);
       header.appendChild(document.createTextNode(letter));
       section.appendChild(header);
-      if (letter === MYSTERY_WORD[i]) {
+      if (matched[i]) {
         // If the letter is the correct letter in the correct position
         section.classList.add('correct');
         correctCount++;
       }
-      else if (MYSTERY_WORD.includes(letter)) {
-        // If the letter is in the word but not in the correct position
-        // Count the number of times the letter is in the word
-        wordCount = 0;
-        for (let l of MYSTERY_WORD) {
-          if (l === letter) {
-            wordCount++;
-          }
-        }
-        // Count the number of times the letter is in the guess including this time
-        guessCount = 0;
-        for (let l of guess.slice(0, i + 1)) {
-          if (l === letter) {
-            guessCount++;
-          }
-        }
-        if (guessCount <= wordCount) {
-          section.classList.add('right');
-        }
-        else {
-          section.classList.add('wrong');
-        }
-      }
-      else {
+      else if (index < 0) {
+        // If the letter is not in the word
         section.classList.add('wrong');
       }
+      else {
+        // Otherwise, the letter is in the word but not in the correct position
+        section.classList.add('right');
+        leftover.splice(index, 1);
+      }
       OUTPUT.appendChild(section);
-
-      i++;
     }
 
-    if (correctCount === LENGTH) {
+    if (correctCount >= LENGTH) {
       WIN_MESSAGE.classList.remove('hidden');
     }
   }
